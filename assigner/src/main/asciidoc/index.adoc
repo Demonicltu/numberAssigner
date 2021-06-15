@@ -1,0 +1,26 @@
+= Adform home task REST API documentation
+:toc: left
+:toclevels: 4
+:sectids:
+:sectnums:
+:sectanchors:
+:sectlinks:
+:revnumber: {version}
+:revdate: {timestamp}
+
+== Endpoints
+
+=== Assign Number
+==== Post
+===== Request
+====== Request Headers
+include::{snippets}/assignNumber/request-headers.adoc[]
+====== Request Parameters
+include::{snippets}/assignNumber/request-parameters.adoc[]
+====== Example Request
+include::{snippets}/assignNumber/http-request.adoc[]
+===== Response
+====== Response Fields
+include::{snippets}/assignNumber/response-fields.adoc[]
+====== Example Response
+include::{snippets}/assignNumber/http-response.adoc[]
