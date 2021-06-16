@@ -41,7 +41,7 @@ class NumberAssignServiceImplTest {
         String parameter = "S1";
         long value = 15;
 
-        when(generatedNumberRepository.findBysIdentificator(any()))
+        when(generatedNumberRepository.findBysIdentifier(any()))
                 .thenAnswer(invocation -> Optional.of(
                         new GeneratedNumber(invocation.getArgument(0), value)
                 ));
@@ -49,13 +49,13 @@ class NumberAssignServiceImplTest {
         Response response = numberAssignService.getOrGenerateNumber(parameter);
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentificator(any());
+                .findBysIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentificator());
+        Assertions.assertEquals(parameter, response.getsIdentifier());
         Assertions.assertEquals(value, response.getValue());
     }
 
@@ -63,7 +63,7 @@ class NumberAssignServiceImplTest {
     void testGetOrGenerateNumberNotFound() throws Exception {
         String parameter = "S1";
 
-        when(generatedNumberRepository.findBysIdentificator(any()))
+        when(generatedNumberRepository.findBysIdentifier(any()))
                 .thenAnswer(invocation -> Optional.empty());
 
         when(generatedNumberRepository.save(any()))
@@ -72,13 +72,13 @@ class NumberAssignServiceImplTest {
         Response response = numberAssignService.getOrGenerateNumber(parameter);
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentificator(any());
+                .findBysIdentifier(any());
 
         verify(generatedNumberRepository, times(1))
                 .save(any());
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentificator());
+        Assertions.assertEquals(parameter, response.getsIdentifier());
         Assertions.assertTrue(response.getValue() > 0);
     }
 

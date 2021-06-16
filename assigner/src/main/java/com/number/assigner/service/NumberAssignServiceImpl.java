@@ -25,26 +25,26 @@ public class NumberAssignServiceImpl implements NumberAssignService {
     }
 
     @Override
-    public Response getOrGenerateNumber(String sIdentificator) throws GeneratorFailException {
+    public Response getOrGenerateNumber(String sIdentifier) throws GeneratorFailException {
         Optional<GeneratedNumber> optionalGeneratedNumber =
-                generatedNumberRepository.findBysIdentificator(sIdentificator);
+                generatedNumberRepository.findBysIdentifier(sIdentifier);
 
         GeneratedNumber generatedNumber = optionalGeneratedNumber.isPresent() ?
-                optionalGeneratedNumber.get() : generateAndSaveNumber(sIdentificator);
+                optionalGeneratedNumber.get() : generateAndSaveNumber(sIdentifier);
 
         return new Response(
-                generatedNumber.getsIdentificator(),
+                generatedNumber.getsIdentifier(),
                 generatedNumber.getValue()
         );
     }
 
-    private GeneratedNumber generateAndSaveNumber(String sIdentificator) throws GeneratorFailException {
+    private GeneratedNumber generateAndSaveNumber(String sIdentifier) throws GeneratorFailException {
         if (failedGenerator()) {
             throw new GeneratorFailException();
         }
 
         GeneratedNumber generatedNumber = new GeneratedNumber(
-                sIdentificator,
+                sIdentifier,
                 getRandomNumber()
         );
 

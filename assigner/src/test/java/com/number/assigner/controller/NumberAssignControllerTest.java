@@ -88,7 +88,7 @@ class NumberAssignControllerTest {
         Response response = mapper.readValue(responseString, Response.class);
 
         Assertions.assertNotNull(response);
-        Assertions.assertFalse(response.getsIdentificator().isEmpty());
+        Assertions.assertFalse(response.getsIdentifier().isEmpty());
         Assertions.assertTrue(response.getValue() > 0);
     }
 

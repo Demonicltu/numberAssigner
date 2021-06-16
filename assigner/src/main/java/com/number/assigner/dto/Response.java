@@ -6,17 +6,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Response {
 
     @JsonProperty("s")
-    private final String sIdentificator;
+    private final String sIdentifier;
 
     private final long value;
 
-    public Response(String sIdentificator, long value) {
-        this.sIdentificator = sIdentificator;
+    public Response(String sIdentifier, long value) {
+        this.sIdentifier = sIdentifier;
         this.value = value;
     }
 
-    public String getsIdentificator() {
-        return sIdentificator;
+    public String getsIdentifier() {
+        return sIdentifier;
     }
 
     public long getValue() {

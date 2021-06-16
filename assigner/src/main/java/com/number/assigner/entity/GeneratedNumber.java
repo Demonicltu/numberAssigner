@@ -14,7 +14,7 @@ public class GeneratedNumber {
     private Long id;
 
     @Column(name = "s")
-    private String sIdentificator;
+    private String sIdentifier;
 
     private long value;
 
@@ -22,8 +22,8 @@ public class GeneratedNumber {
         //empty for auto init
     }
 
-    public GeneratedNumber(String sIdentificator, long value) {
-        this.sIdentificator = sIdentificator;
+    public GeneratedNumber(String sIdentifier, long value) {
+        this.sIdentifier = sIdentifier;
         this.value = value;
     }
 
@@ -35,12 +35,12 @@ public class GeneratedNumber {
         this.id = id;
     }
 
-    public String getsIdentificator() {
-        return sIdentificator;
+    public String getsIdentifier() {
+        return sIdentifier;
     }
 
-    public void setsIdentificator(String sIdentificator) {
-        this.sIdentificator = sIdentificator;
+    public void setsIdentifier(String sIdentifier) {
+        this.sIdentifier = sIdentifier;
     }
 
     public long getValue() {

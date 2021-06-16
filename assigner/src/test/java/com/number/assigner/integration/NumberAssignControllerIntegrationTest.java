@@ -43,7 +43,7 @@ public class NumberAssignControllerIntegrationTest {
         String parameter = "S1";
         long value = 15;
 
-        when(generatedNumberRepository.findBysIdentificator(any()))
+        when(generatedNumberRepository.findBysIdentifier(any()))
                 .thenAnswer(invocation -> Optional.of(
                         new GeneratedNumber(invocation.getArgument(0), value)
                 ));
@@ -58,7 +58,7 @@ public class NumberAssignControllerIntegrationTest {
                 .andReturn();
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentificator(any());
+                .findBysIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
@@ -67,13 +67,13 @@ public class NumberAssignControllerIntegrationTest {
         Response response = mapper.readValue(responseString, Response.class);
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentificator());
+        Assertions.assertEquals(parameter, response.getsIdentifier());
         Assertions.assertEquals(value, response.getValue());
     }
 
     @Test
     void testAssignNumberGeneratorFailException() throws Exception {
-        when(generatedNumberRepository.findBysIdentificator(any()))
+        when(generatedNumberRepository.findBysIdentifier(any()))
                 .thenAnswer(invocation -> Optional.empty());
 
         MvcResult mvcResult = mockMvc
@@ -86,7 +86,7 @@ public class NumberAssignControllerIntegrationTest {
                 .andReturn();
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentificator(any());
+                .findBysIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
