@@ -1,7 +1,7 @@
 package com.number.assigner.service;
 
 
-import com.number.assigner.dto.Response;
+import com.number.assigner.dto.GeneratedNumberResponse;
 import com.number.assigner.entity.GeneratedNumber;
 import com.number.assigner.repository.GeneratedNumberRepository;
 import org.junit.jupiter.api.Assertions;
@@ -37,49 +37,49 @@ class NumberAssignServiceImplTest {
     }
 
     @Test
-    void testGetOrGenerateNumber() throws Exception {
+    void testGenerateNumber() throws Exception {
         String parameter = "S1";
         long value = 15;
 
-        when(generatedNumberRepository.findBysIdentifier(any()))
+        when(generatedNumberRepository.findByIdentifier(any()))
                 .thenAnswer(invocation -> Optional.of(
                         new GeneratedNumber(invocation.getArgument(0), value)
                 ));
 
-        Response response = numberAssignService.getOrGenerateNumber(parameter);
+        GeneratedNumberResponse generatedNumberResponse = numberAssignService.generateNumber(parameter);
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentifier(any());
+                .findByIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentifier());
-        Assertions.assertEquals(value, response.getValue());
+        Assertions.assertNotNull(generatedNumberResponse);
+        Assertions.assertEquals(parameter, generatedNumberResponse.getIdentifier());
+        Assertions.assertEquals(value, generatedNumberResponse.getValue());
     }
 
     @Test
-    void testGetOrGenerateNumberNotFound() throws Exception {
+    void testGenerateNumberNotFound() throws Exception {
         String parameter = "S1";
 
-        when(generatedNumberRepository.findBysIdentifier(any()))
+        when(generatedNumberRepository.findByIdentifier(any()))
                 .thenAnswer(invocation -> Optional.empty());
 
         when(generatedNumberRepository.save(any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Response response = numberAssignService.getOrGenerateNumber(parameter);
+        GeneratedNumberResponse generatedNumberResponse = numberAssignService.generateNumber(parameter);
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentifier(any());
+                .findByIdentifier(any());
 
         verify(generatedNumberRepository, times(1))
                 .save(any());
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentifier());
-        Assertions.assertTrue(response.getValue() > 0);
+        Assertions.assertNotNull(generatedNumberResponse);
+        Assertions.assertEquals(parameter, generatedNumberResponse.getIdentifier());
+        Assertions.assertTrue(generatedNumberResponse.getValue() > 0);
     }
 
 }

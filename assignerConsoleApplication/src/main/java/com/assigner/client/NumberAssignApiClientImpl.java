@@ -2,7 +2,7 @@ package com.assigner.client;
 
 import com.assigner.exception.ApiFailException;
 import com.assigner.helper.RequestHelper;
-import com.assigner.object.Response;
+import com.assigner.object.NumberResponse;
 import com.assigner.singleton.ArgumentsHolder;
 
 import java.io.DataOutputStream;
@@ -12,13 +12,14 @@ import java.net.URL;
 
 public class NumberAssignApiClientImpl implements NumberAssignApiClient {
 
-    private static final String API_S_IDENTIFIER_PARAM = "s";
+    private static final String API_IDENTIFIER_PARAM = "identifier";
+    private static final String API_GENERATE_NUMBER_ENDPOINT = "/v1/number";
 
-    public Response sendRequest(String parameter) throws IOException, ApiFailException {
+    public NumberResponse sendRequest(String parameter) throws IOException, ApiFailException {
         HttpURLConnection con = prepareConnection();
 
         DataOutputStream out = new DataOutputStream(con.getOutputStream());
-        out.writeBytes(RequestHelper.getParamString(API_S_IDENTIFIER_PARAM, parameter));
+        out.writeBytes(RequestHelper.getParamString(API_IDENTIFIER_PARAM, parameter));
         out.flush();
         out.close();
 
@@ -32,15 +33,15 @@ public class NumberAssignApiClientImpl implements NumberAssignApiClient {
             throw new ApiFailException("Failed to get number from API");
         }
 
-        Response response = RequestHelper.getDeserializedResponse(con.getInputStream(), Response.class);
+        NumberResponse numberResponse = RequestHelper.getDeserializedResponse(con.getInputStream(), NumberResponse.class);
 
         con.disconnect();
 
-        return response;
+        return numberResponse;
     }
 
     private HttpURLConnection prepareConnection() throws IOException {
-        URL url = new URL(ArgumentsHolder.getInstance().getApiUrl());
+        URL url = new URL(ArgumentsHolder.getInstance().getApiUrl() + API_GENERATE_NUMBER_ENDPOINT);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
 

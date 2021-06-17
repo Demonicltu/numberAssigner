@@ -1,6 +1,6 @@
 package com.number.assigner.controller;
 
-import com.number.assigner.dto.Response;
+import com.number.assigner.dto.GeneratedNumberResponse;
 import com.number.assigner.error.ApplicationError;
 import com.number.assigner.exception.GeneratorFailException;
 import com.number.assigner.exception.RequestException;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/v1/number")
 @Validated
 public class NumberAssignController {
 
@@ -25,9 +25,9 @@ public class NumberAssignController {
     }
 
     @PostMapping
-    public Response assignNumber(@RequestParam(name = "s") @NotBlank String sIdentifier) {
+    public GeneratedNumberResponse assignNumber(@RequestParam @NotBlank String identifier) {
         try {
-            return numberAssignService.getOrGenerateNumber(sIdentifier);
+            return numberAssignService.generateNumber(identifier);
         } catch (GeneratorFailException e) {
             throw new RequestException(ApplicationError.NUMBER_ASSIGN_ERROR);
         }

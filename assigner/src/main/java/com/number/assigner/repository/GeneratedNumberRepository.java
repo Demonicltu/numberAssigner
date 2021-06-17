@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface GeneratedNumberRepository extends JpaRepository<GeneratedNumber, Long> {
 
-    Optional<GeneratedNumber> findBysIdentifier(String sIdentifier);
+    Optional<GeneratedNumber> findByIdentifier(String identifier);
 
 }

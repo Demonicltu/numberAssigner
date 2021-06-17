@@ -1,7 +1,7 @@
 package com.number.assigner.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.number.assigner.dto.Response;
+import com.number.assigner.dto.GeneratedNumberResponse;
 import com.number.assigner.error.ApplicationError;
 import com.number.assigner.error.RequestError;
 import com.number.assigner.exception.GeneratorFailException;
@@ -54,14 +54,14 @@ class NumberAssignControllerTest {
 
     @Test
     void testAssignNumber() throws Exception {
-        when(numberAssignService.getOrGenerateNumber(any()))
-                .thenAnswer(invocation -> new Response(invocation.getArgument(0), 1));
+        when(numberAssignService.generateNumber(any()))
+                .thenAnswer(invocation -> new GeneratedNumberResponse(invocation.getArgument(0), 1));
 
         MvcResult mvcResult = mockMvc
                 .perform(
-                        RestDocumentationRequestBuilders.post("/")
+                        RestDocumentationRequestBuilders.post("/v1/number")
                                 .with(httpBasic("user", "pass"))
-                                .param("s", "S1")
+                                .param("identifier", "S1")
                 )
                 .andExpect(status().isOk())
                 .andDo(
@@ -73,10 +73,10 @@ class NumberAssignControllerTest {
                                         headerWithName("Authorization").description("Basic authentication header")
                                 ),
                                 requestParameters(
-                                        parameterWithName("s").description("Number pair identificator")
+                                        parameterWithName("identifier").description("Number pair identificator")
                                 ),
                                 responseFields(
-                                        fieldWithPath("s").type(JsonFieldType.STRING).description("Number identificator"),
+                                        fieldWithPath("identifier").type(JsonFieldType.STRING).description("Number identificator"),
                                         fieldWithPath("value").type(JsonFieldType.NUMBER).description("Number value")
                                 )
                         )
@@ -85,23 +85,23 @@ class NumberAssignControllerTest {
                 .andReturn();
 
         String responseString = mvcResult.getResponse().getContentAsString();
-        Response response = mapper.readValue(responseString, Response.class);
+        GeneratedNumberResponse generatedNumberResponse = mapper.readValue(responseString, GeneratedNumberResponse.class);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertFalse(response.getsIdentifier().isEmpty());
-        Assertions.assertTrue(response.getValue() > 0);
+        Assertions.assertNotNull(generatedNumberResponse);
+        Assertions.assertFalse(generatedNumberResponse.getIdentifier().isEmpty());
+        Assertions.assertTrue(generatedNumberResponse.getValue() > 0);
     }
 
     @Test
     void testAssignNumberGeneratorFailException() throws Exception {
-        when(numberAssignService.getOrGenerateNumber(any()))
+        when(numberAssignService.generateNumber(any()))
                 .thenThrow(new GeneratorFailException());
 
         MvcResult mvcResult = mockMvc
                 .perform(
-                        MockMvcRequestBuilders.post("/")
+                        MockMvcRequestBuilders.post("/v1/number")
                                 .with(httpBasic("user", "pass"))
-                                .param("s", "S1")
+                                .param("identifier", "S1")
                 )
                 .andExpect(status().isInternalServerError())
                 .andReturn();

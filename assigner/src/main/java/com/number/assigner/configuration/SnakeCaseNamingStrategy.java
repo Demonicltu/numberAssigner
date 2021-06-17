@@ -1,4 +1,4 @@
-package com.number.assigner.namingstrategy;
+package com.number.assigner.configuration;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;

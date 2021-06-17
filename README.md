@@ -25,4 +25,4 @@
 * Go to ../numberAssigner/assignerConsoleApplication/target
 * run assigner-jar-with-dependencies.jar
 * java –jar <Jar file>.jar -api <api url> -if <input filename> -of <output filename> -user <api authorization username> -pass <api authorization password>
-* For example: java –jar assigner-jar-with-dependencies.jar -api http://localhost:8080/ -if input.txt -of output.txt -user user -pass pass 
+* For example: java –jar assigner-jar-with-dependencies.jar -api http://localhost:8080 -if input.txt -of output.txt -user user -pass pass 

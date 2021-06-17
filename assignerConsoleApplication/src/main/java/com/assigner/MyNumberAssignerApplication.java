@@ -4,7 +4,7 @@ import com.assigner.client.NumberAssignApiClient;
 import com.assigner.client.NumberAssignApiClientImpl;
 import com.assigner.exception.ApiFailException;
 import com.assigner.helper.ArgumentHelper;
-import com.assigner.object.Response;
+import com.assigner.object.NumberResponse;
 import org.apache.commons.cli.CommandLine;
 import com.assigner.singleton.ArgumentsHolder;
 
@@ -68,9 +68,9 @@ public class MyNumberAssignerApplication {
                     continue;
                 }
 
-                Response response;
+                NumberResponse numberResponse;
                 try {
-                    response = numberAssignApiClient.sendRequest(data);
+                    numberResponse = numberAssignApiClient.sendRequest(data);
                 } catch (ApiFailException e) {
                     System.out.println("ApiFailException occurred.");
                     outputWriter.write("\n");
@@ -78,7 +78,7 @@ public class MyNumberAssignerApplication {
                     continue;
                 }
 
-                outputWriter.write(String.format("%4s %4d\n", response.getS(), response.getValue()));
+                outputWriter.write(String.format("%4s %4d\n", numberResponse.getIdentifier(), numberResponse.getValue()));
             }
         }
     }

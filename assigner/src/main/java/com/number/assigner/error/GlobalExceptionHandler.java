@@ -1,8 +1,6 @@
-package com.number.assigner.controller;
+package com.number.assigner.error;
 
-import com.number.assigner.error.RequestError;
 import com.number.assigner.exception.RequestException;
-import com.number.assigner.error.ApplicationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

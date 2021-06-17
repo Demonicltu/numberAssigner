@@ -1,6 +1,7 @@
 package com.number.assigner.service;
 
-import com.number.assigner.dto.Response;
+import com.number.assigner.mapper.ResponseMapper;
+import com.number.assigner.dto.GeneratedNumberResponse;
 import com.number.assigner.entity.GeneratedNumber;
 import com.number.assigner.exception.GeneratorFailException;
 import com.number.assigner.repository.GeneratedNumberRepository;
@@ -25,30 +26,36 @@ public class NumberAssignServiceImpl implements NumberAssignService {
     }
 
     @Override
-    public Response getOrGenerateNumber(String sIdentifier) throws GeneratorFailException {
+    public GeneratedNumberResponse generateNumber(String identifier) throws GeneratorFailException {
         Optional<GeneratedNumber> optionalGeneratedNumber =
-                generatedNumberRepository.findBysIdentifier(sIdentifier);
+                generatedNumberRepository.findByIdentifier(identifier);
 
-        GeneratedNumber generatedNumber = optionalGeneratedNumber.isPresent() ?
-                optionalGeneratedNumber.get() : generateAndSaveNumber(sIdentifier);
+        if (optionalGeneratedNumber.isPresent()) {
+            return ResponseMapper.toResponse(
+                    optionalGeneratedNumber.get().getIdentifier(),
+                    optionalGeneratedNumber.get().getValue()
+            );
+        }
 
-        return new Response(
-                generatedNumber.getsIdentifier(),
+        GeneratedNumber generatedNumber = new GeneratedNumber(
+                identifier,
+                getGeneratedNumber()
+        );
+
+        generatedNumberRepository.save(generatedNumber);
+
+        return new GeneratedNumberResponse(
+                generatedNumber.getIdentifier(),
                 generatedNumber.getValue()
         );
     }
 
-    private GeneratedNumber generateAndSaveNumber(String sIdentifier) throws GeneratorFailException {
+    private long getGeneratedNumber() throws GeneratorFailException {
         if (failedGenerator()) {
             throw new GeneratorFailException();
         }
 
-        GeneratedNumber generatedNumber = new GeneratedNumber(
-                sIdentifier,
-                getRandomNumber()
-        );
-
-        return generatedNumberRepository.save(generatedNumber);
+        return getRandomNumber();
     }
 
     private long getRandomNumber() {

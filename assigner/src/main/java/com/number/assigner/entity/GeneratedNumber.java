@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Column;
 
 @Entity
 public class GeneratedNumber {
@@ -13,8 +12,7 @@ public class GeneratedNumber {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "s")
-    private String sIdentifier;
+    private String identifier;
 
     private long value;
 
@@ -22,8 +20,8 @@ public class GeneratedNumber {
         //empty for auto init
     }
 
-    public GeneratedNumber(String sIdentifier, long value) {
-        this.sIdentifier = sIdentifier;
+    public GeneratedNumber(String identifier, long value) {
+        this.identifier = identifier;
         this.value = value;
     }
 
@@ -35,12 +33,12 @@ public class GeneratedNumber {
         this.id = id;
     }
 
-    public String getsIdentifier() {
-        return sIdentifier;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setsIdentifier(String sIdentifier) {
-        this.sIdentifier = sIdentifier;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public long getValue() {

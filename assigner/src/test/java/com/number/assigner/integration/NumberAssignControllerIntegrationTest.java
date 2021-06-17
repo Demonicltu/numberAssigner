@@ -1,7 +1,7 @@
 package com.number.assigner.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.number.assigner.dto.Response;
+import com.number.assigner.dto.GeneratedNumberResponse;
 import com.number.assigner.entity.GeneratedNumber;
 import com.number.assigner.error.ApplicationError;
 import com.number.assigner.error.RequestError;
@@ -43,50 +43,50 @@ public class NumberAssignControllerIntegrationTest {
         String parameter = "S1";
         long value = 15;
 
-        when(generatedNumberRepository.findBysIdentifier(any()))
+        when(generatedNumberRepository.findByIdentifier(any()))
                 .thenAnswer(invocation -> Optional.of(
                         new GeneratedNumber(invocation.getArgument(0), value)
                 ));
 
         MvcResult mvcResult = mockMvc
                 .perform(
-                        RestDocumentationRequestBuilders.post("/")
+                        RestDocumentationRequestBuilders.post("/v1/number")
                                 .with(httpBasic("user", "pass"))
-                                .param("s", parameter)
+                                .param("identifier", parameter)
                 )
                 .andExpect(status().isOk())
                 .andReturn();
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentifier(any());
+                .findByIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
 
         String responseString = mvcResult.getResponse().getContentAsString();
-        Response response = mapper.readValue(responseString, Response.class);
+        GeneratedNumberResponse generatedNumberResponse = mapper.readValue(responseString, GeneratedNumberResponse.class);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(parameter, response.getsIdentifier());
-        Assertions.assertEquals(value, response.getValue());
+        Assertions.assertNotNull(generatedNumberResponse);
+        Assertions.assertEquals(parameter, generatedNumberResponse.getIdentifier());
+        Assertions.assertEquals(value, generatedNumberResponse.getValue());
     }
 
     @Test
     void testAssignNumberGeneratorFailException() throws Exception {
-        when(generatedNumberRepository.findBysIdentifier(any()))
+        when(generatedNumberRepository.findByIdentifier(any()))
                 .thenAnswer(invocation -> Optional.empty());
 
         MvcResult mvcResult = mockMvc
                 .perform(
-                        RestDocumentationRequestBuilders.post("/")
+                        RestDocumentationRequestBuilders.post("/v1/number")
                                 .with(httpBasic("user", "pass"))
-                                .param("s", "S1")
+                                .param("identifier", "S1")
                 )
                 .andExpect(status().isInternalServerError())
                 .andReturn();
 
         verify(generatedNumberRepository, times(1))
-                .findBysIdentifier(any());
+                .findByIdentifier(any());
 
         verify(generatedNumberRepository, times(0))
                 .save(any());
